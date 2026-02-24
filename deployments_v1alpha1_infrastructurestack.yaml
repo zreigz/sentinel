@@ -72,5 +72,34 @@ spec:
               image: perl:5.34.0
               command: [ "perl",  "-Mbignum=bpi", "-wle", "print bpi(2000)" ]
           restartPolicy: Never
-
+---
+apiVersion: deployments.plural.sh/v1alpha1
+kind: GitRepository
+metadata:
+  name: ansible-home-sample
+  namespace: default
+spec:
+  url: https://github.com/zreigz/ansible-home.git
+---
+apiVersion: deployments.plural.sh/v1alpha1
+kind: InfrastructureStack
+metadata:
+  name: ansible-home-sample
+  namespace: default
+spec:
+  name: "ansible-home-sample"
+  detach: true
+  type: ANSIBLE
+  configuration:
+    version: "sha-a97df68-ansible-11.0"
+    image: "ghcr.io/pluralsh/harness"
+  repositoryRef:
+    name: tansible-home-sample
+    namespace: default
+  clusterRef:
+    name: existing
+    namespace: default
+  git:
+    ref: main
+    folder: /
 
