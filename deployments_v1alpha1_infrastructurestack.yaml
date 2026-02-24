@@ -111,3 +111,15 @@ spec:
       value: /plural/ansible.cfg
     - name: ANSIBLE_INVENTORY
       value: /plural/hosts.ini
+  jobSpec:
+    namespace: default
+    raw:
+      template:
+        spec:
+          initContainers:
+            - name: fix-ssh-key-permissions
+              image: busybox
+              command: ["sh", "-c", "chmod 600 /tmp/ssh-privatekey"]
+              volumeMounts:
+                - name: ssh-key
+                  mountPath: /tmp
