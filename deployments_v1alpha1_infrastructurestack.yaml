@@ -111,3 +111,5 @@ spec:
       value: /plural/ansible.cfg
     - name: ANSIBLE_INVENTORY
       value: /plural/hosts.ini
+    - name: ANSIBLE_PYTHON_INTERPRETER
+      value: auto_silent
