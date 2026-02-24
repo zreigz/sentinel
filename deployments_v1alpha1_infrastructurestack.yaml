@@ -106,3 +106,8 @@ spec:
     - mountPath: /tmp
       secretRef:
         name: ssh-key-secret
+  environment:
+    - name: ANSIBLE_CONFIG
+      value: /plural/ansible.cfg
+    - name: ANSIBLE_INVENTORY
+      value: /plural/hosts.ini
