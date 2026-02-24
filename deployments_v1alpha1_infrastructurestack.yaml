@@ -91,7 +91,7 @@ spec:
   detach: true
   type: ANSIBLE
   configuration:
-    version: "sha-31907f6-ansible-11.0"
+    version: "sha-2743fcf-ansible-11.0"
     image: "ghcr.io/pluralsh/harness"
   repositoryRef:
     name: ansible-home-sample
