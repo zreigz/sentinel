@@ -94,7 +94,7 @@ spec:
     version: "sha-a97df68-ansible-11.0"
     image: "ghcr.io/pluralsh/harness"
   repositoryRef:
-    name: tansible-home-sample
+    name: ansible-home-sample
     namespace: default
   clusterRef:
     name: existing
