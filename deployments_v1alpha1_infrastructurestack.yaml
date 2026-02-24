@@ -102,4 +102,7 @@ spec:
   git:
     ref: main
     folder: /
-
+  files:
+    - mountPath: /tmp
+      secretRef:
+        name: ssh-key-secret
