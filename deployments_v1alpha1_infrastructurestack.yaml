@@ -9,73 +9,6 @@ spec:
 apiVersion: deployments.plural.sh/v1alpha1
 kind: GitRepository
 metadata:
-  name: tf-hello
-  namespace: default
-spec:
-  url: https://github.com/zreigz/tf-hello.git
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: infrastructurestack
-  namespace: default
-data:
-  secret: dGVzdA==
----
-apiVersion: deployments.plural.sh/v1alpha1
-kind: InfrastructureStack
-metadata:
-  labels:
-    app.kubernetes.io/name: infrastructurestack
-    app.kubernetes.io/instance: infrastructurestack-sample
-    app.kubernetes.io/part-of: controller
-    app.kubernetes.io/managed-by: kustomize
-    app.kubernetes.io/created-by: controller
-  name: infrastructurestack-sample
-  namespace: default
-spec:
-  name: "test-job"
-  detach: true
-  type: TERRAFORM
-  configuration:
-    version: "0.4.41-terraform-1.8.2"
-    image: "ghcr.io/pluralsh/harness"
-  repositoryRef:
-    name: tf-hello
-    namespace: default
-  clusterRef:
-    name: existing
-    namespace: default
-  git:
-    ref: main
-    folder: terraform
-  files:
-    - mountPath: /tmp
-      secretRef:
-        name: infrastructurestack
-  environment:
-    - name: TEST
-      value: test
-    - name: SECRET
-      secretKeyRef:
-        name: infrastructurestack
-        key: secret
-  jobSpec:
-    namespace: default
-    raw:
-      template:
-        metadata:
-          namespace: default
-        spec:
-          containers:
-            - name: pi
-              image: perl:5.34.0
-              command: [ "perl",  "-Mbignum=bpi", "-wle", "print bpi(2000)" ]
-          restartPolicy: Never
----
-apiVersion: deployments.plural.sh/v1alpha1
-kind: GitRepository
-metadata:
   name: ansible-home-sample
   namespace: default
 spec:
@@ -91,8 +24,12 @@ spec:
   detach: true
   type: ANSIBLE
   configuration:
-    version: "sha-9e64d86-ansible-11.0"
+    version: "sha-6033479-ansible-11.0"
     image: "ghcr.io/pluralsh/harness"
+    ansible:
+      playbook: "/plural/main.yaml"
+      inventory: "/plural/hosts.ini"
+      privateKeyFile: "/tmp/ssh-privatekey"
   repositoryRef:
     name: ansible-home-sample
     namespace: default
@@ -106,10 +43,3 @@ spec:
     - mountPath: /tmp
       secretRef:
         name: ssh-key-secret
-  environment:
-    - name: ANSIBLE_CONFIG
-      value: /plural/ansible.cfg
-    - name: ANSIBLE_INVENTORY
-      value: /plural/hosts.ini
-    - name: ANSIBLE_PYTHON_INTERPRETER
-      value: auto_silent
